@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HelioFlow</string>
+    <string name="rule_page">Programmation des volets</string>
+    <string name="plus_button">Ajoutez une règle</string>
 </resources>

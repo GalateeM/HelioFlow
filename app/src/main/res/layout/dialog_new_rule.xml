@@ -65,99 +65,107 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp">
 
         <RadioButton
             android:id="@+id/check_monday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/monday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_tuesday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/tuesday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_wednesday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/wednesday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_thursday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/thursday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_friday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/friday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_saturday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/saturday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
 
         <RadioButton
             android:id="@+id/check_sunday"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_weight="1"
             android:layout_margin="4dp"
             android:text="@string/sunday_initial"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_500"
             android:gravity="center"
             android:button="@null"
             android:background="@drawable/day_circle_selector" />
-
     </LinearLayout>
 
 </LinearLayout>

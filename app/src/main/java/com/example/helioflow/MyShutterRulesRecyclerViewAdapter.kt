@@ -5,16 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import com.example.helioflow.placeholder.PlaceholderContent.PlaceholderItem
 import com.example.helioflow.databinding.RuleItemBinding
+import com.example.helioflow.placeholder.ShutterRule
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class MyShutterRulesRecyclerViewAdapter(
-    private val values: MutableList<PlaceholderItem>
+    private val values: MutableList<ShutterRule>
 ) : RecyclerView.Adapter<MyShutterRulesRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +27,8 @@ class MyShutterRulesRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.contentView.text = item.getDisplayContent()
+        holder.detailsView.text = item.getDisplayDetails()
     }
 
     override fun getItemCount(): Int = values.size
@@ -40,16 +36,15 @@ class MyShutterRulesRecyclerViewAdapter(
     inner class ViewHolder(binding: RuleItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.itemNumber
         val contentView: TextView = binding.content
+        val detailsView: TextView = binding.details
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"
         }
     }
 
-    fun addItem(item: PlaceholderItem) {
+    fun addItem(item: ShutterRule) {
         values.add(item)
         notifyItemInserted(values.size - 1)
     }
-
-
 }

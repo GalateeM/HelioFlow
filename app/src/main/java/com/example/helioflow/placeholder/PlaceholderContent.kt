@@ -3,55 +3,49 @@ package com.example.helioflow.placeholder
 import java.util.ArrayList
 import java.util.HashMap
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- *
- * TODO: Replace all uses of this class before publishing your app.
- */
+enum class ShutterAction {
+    OPEN, CLOSE
+}
+
+data class ShutterRule(
+    val id: String,
+    val action: ShutterAction,
+    val hour: Int,
+    val minute: Int,
+    val days: Set<Int>
+) {
+    fun getDisplayTime(): String {
+        return String.format("%02d:%02d", hour, minute)
+    }
+
+    fun getDisplayDays(): String {
+        val dayNames = listOf("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam")
+        return if (days.isEmpty()) {
+            "Aucun jour"
+        } else if (days.size == 7) {
+            "Tous les jours"
+        } else {
+            days.sorted().joinToString(", ") { dayNames[it] }
+        }
+    }
+
+    fun getDisplayContent(): String {
+        val actionText = if (action == ShutterAction.OPEN) "Ouverture" else "Fermeture"
+        return "$actionText à ${this.getDisplayTime()}"
+    }
+
+    fun getDisplayDetails(): String {
+        return getDisplayDays()
+    }
+}
+
 object PlaceholderContent {
 
-    /**
-     * An array of sample (placeholder) items.
-     */
-    val ITEMS: MutableList<PlaceholderItem> = ArrayList()
+    val ITEMS: MutableList<ShutterRule> = ArrayList()
+    val ITEM_MAP: MutableMap<String, ShutterRule> = HashMap()
 
-    /**
-     * A map of sample (placeholder) items, by ID.
-     */
-    val ITEM_MAP: MutableMap<String, PlaceholderItem> = HashMap()
-
-    private val COUNT = 25
-
-    init {
-        // Add some sample items.
-        for (i in 1..COUNT) {
-            addItem(createPlaceholderItem(i))
-        }
-    }
-
-    private fun addItem(item: PlaceholderItem) {
+    private fun addItem(item: ShutterRule) {
         ITEMS.add(item)
         ITEM_MAP.put(item.id, item)
-    }
-
-    private fun createPlaceholderItem(position: Int): PlaceholderItem {
-        return PlaceholderItem(position.toString(), "Item " + position, makeDetails(position))
-    }
-
-    private fun makeDetails(position: Int): String {
-        val builder = StringBuilder()
-        builder.append("Details about Item: ").append(position)
-        for (i in 0..position - 1) {
-            builder.append("\nMore details information here.")
-        }
-        return builder.toString()
-    }
-
-    /**
-     * A placeholder item representing a piece of content.
-     */
-    data class PlaceholderItem(val id: String, val content: String, val details: String) {
-        override fun toString(): String = content
     }
 }

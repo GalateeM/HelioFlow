@@ -2,4 +2,27 @@
     <string name="app_name">HelioFlow</string>
     <string name="rule_page">Programmation des volets</string>
     <string name="plus_button">Ajoutez une règle</string>
+    <string name="new_rule_title">Nouvelle programmation</string>
+    <string name="action_label">Action</string>
+    <string name="opening">Ouverture</string>
+    <string name="closing">Fermeture</string>
+    <string name="time_label">Heure</string>
+    <string name="default_time">08:00</string>
+    <string name="days_label">Jours</string>
+    <string name="monday_short">Lun</string>
+    <string name="tuesday_short">Mar</string>
+    <string name="wednesday_short">Mer</string>
+    <string name="thursday_short">Jeu</string>
+    <string name="friday_short">Ven</string>
+    <string name="saturday_short">Sam</string>
+    <string name="sunday_short">Dim</string>
+    <string name="monday_initial">L</string>
+    <string name="tuesday_initial">Ma</string>
+    <string name="wednesday_initial">Me</string>
+    <string name="thursday_initial">J</string>
+    <string name="friday_initial">V</string>
+    <string name="saturday_initial">S</string>
+    <string name="sunday_initial">D</string>
+    <string name="cancel">Annuler</string>
+    <string name="validate">Valider</string>
 </resources>

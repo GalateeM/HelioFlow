@@ -67,7 +67,7 @@
         android:layout_marginTop="8dp">
 
         <!-- MONDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_monday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -76,7 +76,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/monday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- TUESDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_tuesday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -94,7 +94,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/tuesday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -103,7 +103,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- WEDNESDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_wednesday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -112,7 +112,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/wednesday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -121,7 +121,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- THURSDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_thursday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -130,7 +130,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/thursday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -139,7 +139,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- FRIDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_friday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -148,7 +148,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/friday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -157,7 +157,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- SATURDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_saturday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -166,7 +166,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/saturday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -175,7 +175,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- SUNDAY -->
-        <RadioButton
+        <CheckBox
             android:id="@+id/check_sunday"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -184,7 +184,7 @@
             android:background="@drawable/day_circle_selector"
             android:text="@string/sunday_initial"
             android:textStyle="bold"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/text_day_selector"
             android:gravity="center"
             android:textSize="14sp"
             app:layout_constraintDimensionRatio="1:1"

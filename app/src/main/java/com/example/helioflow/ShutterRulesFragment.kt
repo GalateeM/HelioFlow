@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
+import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,13 +79,13 @@ class ShutterRulesFragment : Fragment() {
                 }
 
                 val days = mutableSetOf<Int>()
-                if (dialogView.findViewById<RadioButton>(R.id.check_monday).isChecked) days.add(1)
-                if (dialogView.findViewById<RadioButton>(R.id.check_tuesday).isChecked) days.add(2)
-                if (dialogView.findViewById<RadioButton>(R.id.check_wednesday).isChecked) days.add(3)
-                if (dialogView.findViewById<RadioButton>(R.id.check_thursday).isChecked) days.add(4)
-                if (dialogView.findViewById<RadioButton>(R.id.check_friday).isChecked) days.add(5)
-                if (dialogView.findViewById<RadioButton>(R.id.check_saturday).isChecked) days.add(6)
-                if (dialogView.findViewById<RadioButton>(R.id.check_sunday).isChecked) days.add(0)
+                if (dialogView.findViewById<CheckBox>(R.id.check_monday).isChecked) days.add(1)
+                if (dialogView.findViewById<CheckBox>(R.id.check_tuesday).isChecked) days.add(2)
+                if (dialogView.findViewById<CheckBox>(R.id.check_wednesday).isChecked) days.add(3)
+                if (dialogView.findViewById<CheckBox>(R.id.check_thursday).isChecked) days.add(4)
+                if (dialogView.findViewById<CheckBox>(R.id.check_friday).isChecked) days.add(5)
+                if (dialogView.findViewById<CheckBox>(R.id.check_saturday).isChecked) days.add(6)
+                if (dialogView.findViewById<CheckBox>(R.id.check_sunday).isChecked) days.add(0)
 
                 val newRule = ShutterRule(
                     id = (rulesList.size + 1).toString(),

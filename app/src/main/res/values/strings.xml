@@ -25,4 +25,5 @@
     <string name="sunday_initial">D</string>
     <string name="cancel">Annuler</string>
     <string name="validate">Valider</string>
+    <string name="no_day_selected">Veuillez sélectionner au moins un jour</string>
 </resources>

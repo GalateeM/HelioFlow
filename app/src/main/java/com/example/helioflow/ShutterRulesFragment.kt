@@ -68,9 +68,15 @@ class ShutterRulesFragment : Fragment() {
             ).show()
         }
 
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setPositiveButton(R.string.validate) { _, _ ->
+            .setPositiveButton(R.string.validate, null)
+            .setNegativeButton(R.string.cancel, null)
+            .create()
+
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setOnClickListener {
                 val actionRadioGroup = dialogView.findViewById<android.widget.RadioGroup>(R.id.action_radio_group)
                 val action = if (actionRadioGroup.checkedRadioButtonId == R.id.radio_open) {
                     ShutterAction.OPEN
@@ -87,6 +93,11 @@ class ShutterRulesFragment : Fragment() {
                 if (dialogView.findViewById<CheckBox>(R.id.check_saturday).isChecked) days.add(6)
                 if (dialogView.findViewById<CheckBox>(R.id.check_sunday).isChecked) days.add(0)
 
+                if (days.isEmpty()) {
+                    android.widget.Toast.makeText(context, R.string.no_day_selected, android.widget.Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 val newRule = ShutterRule(
                     id = (rulesList.size + 1).toString(),
                     action = action,
@@ -97,8 +108,10 @@ class ShutterRulesFragment : Fragment() {
 
                 rulesList.add(newRule)
                 adapter.notifyItemInserted(rulesList.size - 1)
+                dialog.dismiss()
             }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
+        }
+
+        dialog.show()
     }
 }

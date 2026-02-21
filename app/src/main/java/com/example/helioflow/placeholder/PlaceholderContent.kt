@@ -19,9 +19,13 @@ data class ShutterRule(
     }
 
     fun getDisplayDays(): String {
-        val dayNames = listOf("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam")
+        val dayNames = listOf("Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim")
         return if (days.isEmpty()) {
             "Aucun jour"
+        } else if (setOf(5, 6).all { it in days }) {
+            "Week-end"
+        } else if (setOf(0, 1, 2, 3, 4).all { it in days }) {
+            "Jours de semaine"
         } else if (days.size == 7) {
             "Tous les jours"
         } else {

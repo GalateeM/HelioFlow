@@ -26,4 +26,9 @@
     <string name="cancel">Annuler</string>
     <string name="validate">Valider</string>
     <string name="no_day_selected">Veuillez sélectionner au moins un jour</string>
+    <string name="token_dialog_title">Token API</string>
+    <string name="token_hint">Entrez votre token</string>
+    <string name="token_saved">Token enregistré</string>
+    <string name="settings">Paramètres</string>
+    <string name="token_required">Le token est requis</string>
 </resources>

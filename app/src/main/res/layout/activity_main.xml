@@ -7,14 +7,34 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Mon texte -->
-    <TextView
-        android:id="@+id/textView"
+    <!-- Header with title and settings button -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/rule_page"
-        android:textSize="20sp"
-        android:paddingBottom="8dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Mon texte -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/rule_page"
+            android:textSize="20sp"
+            android:paddingBottom="8dp" />
+
+        <!-- Settings button -->
+        <ImageButton
+            android:id="@+id/settings_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/baseline_settings_24"
+            app:tint="@color/black" />
+
+    </LinearLayout>
 
     <!-- Container pour le Fragment -->
     <FrameLayout

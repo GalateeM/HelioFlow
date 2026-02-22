@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.helioflow.api.ShutterApiClient
+import com.example.helioflow.api.toShutterRule
 import com.example.helioflow.placeholder.PlaceholderContent
 import com.example.helioflow.placeholder.ShutterAction
 import com.example.helioflow.placeholder.ShutterRule
+import kotlinx.coroutines.launch
 
 class ShutterRulesFragment : Fragment() {
 
@@ -39,10 +44,31 @@ class ShutterRulesFragment : Fragment() {
         adapter = MyShutterRulesRecyclerViewAdapter(rulesList)
         recyclerView.adapter = adapter
 
+        fetchProgrammations()
+
         return view
     }
 
+    private fun fetchProgrammations() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val programmations = ShutterApiClient.instance.getProgrammations()
+                rulesList.clear()
+                rulesList.addAll(programmations.map { it.toShutterRule() })
+                if (::adapter.isInitialized) {
+                    adapter.notifyDataSetChanged()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Erreur lors du chargement: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     fun addNewRule() {
+        if (!::adapter.isInitialized) {
+            Toast.makeText(context, "Chargement en cours...", Toast.LENGTH_SHORT).show()
+            return
+        }
         showNewRuleDialog()
     }
 

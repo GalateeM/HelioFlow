@@ -1,23 +1,34 @@
 package com.example.helioflow.api
 
+import android.content.Context
+import com.example.helioflow.TokenManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ShutterApiClient {
 
-    private const val BASE_URL = "https://monapp.alwaysdata.net/"
+    private const val BASE_URL = "https://helioflow.alwaysdata.net/"
 
-    private const val TOKEN = "un_truc_long_et_imprevisible_123456"
+    private var tokenSupplier: (() -> String?)? = null
+    private var okHttpClient: OkHttpClient? = null
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor(TOKEN))
-        .build()
+    fun initialize(context: Context) {
+        val tokenManager = TokenManager(context)
+        tokenSupplier = { tokenManager.getToken() }
+        val supplier = tokenSupplier
+        okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(supplier!!))
+            .build()
+    }
 
     val instance: ShutterApiService by lazy {
+        if (okHttpClient == null) {
+            throw IllegalStateException("ShutterApiClient must be initialized with context first")
+        }
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
+            .client(okHttpClient!!)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ShutterApiService::class.java)

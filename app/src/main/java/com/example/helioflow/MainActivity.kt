@@ -7,12 +7,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.helioflow.placeholder.PlaceholderContent
-import com.example.helioflow.placeholder.ShutterAction
-import com.example.helioflow.placeholder.ShutterRule
+import com.example.helioflow.api.ShutterApiClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tokenManager = TokenManager(this)
+        ShutterApiClient.initialize(this)
 
         if (savedInstanceState == null) {
             val fragment = ShutterRulesFragment.newInstance()

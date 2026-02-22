@@ -1,11 +1,11 @@
 package com.example.helioflow.api
 
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import okhttp3.Response
 
-class AuthInterceptor(private val token: String) : Interceptor {
+class AuthInterceptor(private val tokenSupplier: () -> String?) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+        val token = tokenSupplier() ?: ""
         val request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $token")
             .build()

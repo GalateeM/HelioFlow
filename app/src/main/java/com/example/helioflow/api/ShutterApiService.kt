@@ -13,6 +13,12 @@ data class Programmation(
     val time: String
 )
 
+data class CreateProgrammationRequest(
+    val action: String,
+    val days: String,
+    val time: String
+)
+
 fun Programmation.toShutterRule(): ShutterRule {
     val actionEnum = if (action.lowercase() == "open") ShutterAction.OPEN else ShutterAction.CLOSE
     
@@ -45,9 +51,35 @@ fun Programmation.toShutterRule(): ShutterRule {
     )
 }
 
+fun ShutterRule.toCreateRequest(): CreateProgrammationRequest {
+    val actionStr = if (action == ShutterAction.OPEN) "open" else "close"
+    
+    val dayMap = mapOf(
+        0 to "L",
+        1 to "Ma",
+        2 to "Me",
+        3 to "J",
+        4 to "V",
+        5 to "S",
+        6 to "D"
+    )
+    
+    val daysStr = days.sorted().mapNotNull { dayMap[it] }.joinToString(", ")
+    val timeStr = String.format("%02dh%02d", hour, minute)
+    
+    return CreateProgrammationRequest(
+        action = actionStr,
+        days = daysStr,
+        time = timeStr
+    )
+}
+
 interface ShutterApiService {
 
     @GET("programmations")
     suspend fun getProgrammations(): List<Programmation>
+
+    @POST("programmations")
+    suspend fun createProgrammation(@Body request: CreateProgrammationRequest): Programmation
 
 }

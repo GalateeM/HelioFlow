@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helioflow.api.ShutterApiClient
+import com.example.helioflow.api.toCreateRequest
 import com.example.helioflow.api.toShutterRule
 import com.example.helioflow.placeholder.PlaceholderContent
 import com.example.helioflow.placeholder.ShutterAction
@@ -132,9 +133,16 @@ class ShutterRulesFragment : Fragment() {
                     days = days
                 )
 
-                rulesList.add(newRule)
-                adapter.notifyItemInserted(rulesList.size - 1)
-                dialog.dismiss()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        ShutterApiClient.instance.createProgrammation(newRule.toCreateRequest())
+                        rulesList.add(newRule)
+                        adapter.notifyItemInserted(rulesList.size - 1)
+                        dialog.dismiss()
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Erreur lors de la création: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 

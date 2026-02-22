@@ -1,4 +1,5 @@
 import mysql.connector
+import requests
 from datetime import datetime
 import os
 
@@ -14,11 +15,89 @@ DB_CONFIG = {
     "database": DB_NAME
 }
 
+DAY_MAPPING = {
+    0: "L",
+    1: "Ma",
+    2: "Me",
+    3: "J",
+    4: "V",
+    5: "S",
+    6: "D"
+}
+
+def execute_somfy(command_name):
+    token = os.getenv("SOMFY_TOKEN")
+    device_salon = os.getenv("DEVICE_URL_SALON")
+    device_chambre = os.getenv("DEVICE_URL_CHAMBRE")
+    somfy_url = os.getenv("SOMFY_API_URL")
+
+    payloadSalon = {
+        "label": "Open Salon",
+        "actions": [
+            {
+                "deviceURL": device_salon,
+                "commands": [
+                    {
+                        "name": command_name,
+                        "parameters": []
+                    }
+                ]
+            }
+        ]
+    }
+
+    payloadChambre = {
+        "label": "Open Chambre",
+        "actions": [
+            {
+                "deviceURL": device_chambre,
+                "commands": [
+                    {
+                        "name": command_name,
+                        "parameters": []
+                    }
+                ]
+            }
+        ]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    try:
+        response = requests.post(somfy_url, json=payloadSalon, headers=headers)
+
+        if response.status_code == 200:
+            print("✅ Commande Somfy envoyée avec succès")
+        else:
+            print("❌ Erreur Somfy :", response.status_code)
+            print(response.text)
+
+        response = requests.post(somfy_url, json=payloadChambre, headers=headers)
+
+        if response.status_code == 200:
+            print("✅ Commande Somfy envoyée avec succès")
+        else:
+            print("❌ Erreur Somfy :", response.status_code)
+            print(response.text)
+
+    except Exception as e:
+        print("❌ Exception appel Somfy :", e)
+
+
+
 def main():
-    print("===================================")
-    print("CRON LECTURE DB LANCÉ")
-    print("Heure actuelle :", datetime.now())
-    print("===================================")
+    now = datetime.now()
+    current_day_code = DAY_MAPPING[now.weekday()]
+    current_time_str = now.strftime("%Hh%M")
+
+    print("=================================")
+    print("Cron lancé à :", now)
+    print("Jour actuel :", current_day_code)
+    print("Heure actuelle :", current_time_str)
+    print("=================================")
 
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
@@ -26,15 +105,18 @@ def main():
 
         cursor.execute("SELECT * FROM Programmations")
 
-        rows = cursor.fetchall()
+        programmations = cursor.fetchall()
 
-        print(f"{len(rows)} programmations trouvées.\n")
+        print(f"{len(programmations)} programmations trouvées.\n")
 
-        for row in rows:
-            print("ID:", row["id"])
-            print("Action:", row["action"])
-            print("Execution:", row["execution_time"])
-            print("----------------------")
+        for prog in programmations:
+
+            # Nettoyage et séparation des jours
+            days_list = [d.strip() for d in prog["days"].split(",")]
+            if current_day_code in days_list and prog["time"] == current_time_str:
+                print(f"À exécuter : action={prog['action']}")
+                execute_somfy(prog["action"])
+
 
         cursor.close()
         conn.close()

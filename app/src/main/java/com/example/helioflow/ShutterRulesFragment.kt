@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helioflow.api.ShutterApiClient
+import com.example.helioflow.api.parseProgrammations
 import com.example.helioflow.api.toCreateRequest
 import com.example.helioflow.api.toShutterRule
 import com.example.helioflow.placeholder.PlaceholderContent
@@ -53,7 +54,8 @@ class ShutterRulesFragment : Fragment() {
     private fun fetchProgrammations() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val programmations = ShutterApiClient.instance.getProgrammations()
+                val json = ShutterApiClient.instance.getProgrammationsRaw()
+                val programmations = parseProgrammations(json)
                 rulesList.clear()
                 rulesList.addAll(programmations.map { it.toShutterRule() })
                 if (::adapter.isInitialized) {
@@ -61,6 +63,7 @@ class ShutterRulesFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 Toast.makeText(context, "Erreur lors du chargement: ${e.message}", Toast.LENGTH_SHORT).show()
+                throw e;
             }
         }
     }

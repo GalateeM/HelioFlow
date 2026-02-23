@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.helioflow.TokenManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object ShutterApiClient {
 
@@ -29,7 +29,7 @@ object ShutterApiClient {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient!!)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
             .create(ShutterApiService::class.java)
     }

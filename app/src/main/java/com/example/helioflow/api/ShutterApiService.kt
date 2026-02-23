@@ -7,10 +7,10 @@ import retrofit2.http.POST
 import retrofit2.http.Body
 
 data class Programmation(
-    val id: Int,
-    val action: String,
-    val days: String,
-    val time: String
+    val id: Int = 0,
+    val action: String = "",
+    val days: String = "",
+    val time: String = ""
 )
 
 data class CreateProgrammationRequest(
@@ -77,9 +77,34 @@ fun ShutterRule.toCreateRequest(): CreateProgrammationRequest {
 interface ShutterApiService {
 
     @GET("programmations")
-    suspend fun getProgrammations(): List<Programmation>
+    suspend fun getProgrammationsRaw(): String
 
     @POST("programmations")
     suspend fun createProgrammation(@Body request: CreateProgrammationRequest): Programmation
 
+}
+
+fun parseProgrammations(json: String): List<Programmation> {
+    val trimmed = json.trim()
+    if (trimmed.isEmpty() || trimmed == "{}" || trimmed == "[]") {
+        return emptyList()
+    }
+
+    if (!trimmed.startsWith("[")) {
+        return emptyList()
+    }
+
+    val result = mutableListOf<Programmation>()
+    val itemRegex = Regex("""\{[^}]+\}""")
+    val items = itemRegex.findAll(trimmed)
+
+    for (item in items) {
+        val obj = item.value
+        val id = Regex(""""id":\s*(\d+)""").find(obj)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+        val action = Regex(""""action":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
+        val days = Regex(""""days":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
+        val time = Regex(""""time":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
+        result.add(Programmation(id, action, days, time))
+    }
+    return result
 }

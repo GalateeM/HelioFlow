@@ -82,6 +82,45 @@ def create_programmation():
     conn.close()
     
     return jsonify({"status": "Programmation enregistrée"})
+
+
+@app.route('/programmations/<int:id>', methods=['PUT'])
+@require_token
+def update_programmation(id):
+    data = request.json
+
+    action = data.get("action")
+    days = data.get("days")
+    time = data.get("time")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Vérifier que la programmation existe
+    cursor.execute("SELECT id FROM Programmations WHERE id = %s", (id,))
+    existing = cursor.fetchone()
+
+    if not existing:
+        cursor.close()
+        conn.close()
+        return jsonify({"error": "Programmation introuvable"}), 404
+
+    cursor.execute(
+        """
+        UPDATE Programmations
+        SET action = %s,
+            days = %s,
+            time = %s
+        WHERE id = %s
+        """,
+        (action, days, time, id)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"status": "Programmation mise à jour"}), 200
     
 
 if __name__ == '__main__':

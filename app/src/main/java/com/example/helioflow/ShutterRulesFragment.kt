@@ -63,7 +63,6 @@ class ShutterRulesFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 Toast.makeText(context, "Erreur lors du chargement: ${e.message}", Toast.LENGTH_SHORT).show()
-                throw e;
             }
         }
     }
@@ -144,6 +143,7 @@ class ShutterRulesFragment : Fragment() {
                         dialog.dismiss()
                     } catch (e: Exception) {
                         Toast.makeText(context, "Erreur lors de la création: ${e.message}", Toast.LENGTH_SHORT).show()
+                        throw e;
                     }
                 }
             }

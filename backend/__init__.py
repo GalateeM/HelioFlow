@@ -55,7 +55,10 @@ def get_programmations():
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
-    return rows
+    if rows:
+        return rows
+    else:
+        return {}
 
 @app.route('/programmations', methods=['POST'])
 @require_token

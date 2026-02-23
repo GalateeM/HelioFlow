@@ -121,6 +121,34 @@ def update_programmation(id):
     conn.close()
 
     return jsonify({"status": "Programmation mise à jour"}), 200
+
+
+@app.route('/programmations/<int:id>', methods=['DELETE'])
+@require_token
+def delete_programmation(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Vérifier que la programmation existe
+    cursor.execute("SELECT id FROM Programmations WHERE id = %s", (id,))
+    existing = cursor.fetchone()
+
+    if not existing:
+        cursor.close()
+        conn.close()
+        return jsonify({"error": "Programmation introuvable"}), 404
+
+    cursor.execute(
+        "DELETE FROM Programmations WHERE id = %s",
+        (id,)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"status": "Programmation supprimée"}), 200
     
 
 if __name__ == '__main__':

@@ -5,6 +5,9 @@ import com.example.helioflow.placeholder.ShutterRule
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
+import retrofit2.http.PUT
+import retrofit2.http.DELETE
+import retrofit2.http.Path
 
 data class Programmation(
     val id: Int = 0,
@@ -81,6 +84,12 @@ interface ShutterApiService {
 
     @POST("programmations")
     suspend fun createProgrammation(@Body request: CreateProgrammationRequest): Programmation
+
+    @PUT("programmations/{id}")
+    suspend fun updateProgrammation(@Path("id") id: Int, @Body request: CreateProgrammationRequest): Programmation
+
+    @DELETE("programmations/{id}")
+    suspend fun deleteProgrammation(@Path("id") id: Int)
 
 }
 

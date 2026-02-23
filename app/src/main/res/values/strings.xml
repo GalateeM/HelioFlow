@@ -31,4 +31,11 @@
     <string name="token_saved">Token enregistré</string>
     <string name="settings">Paramètres</string>
     <string name="token_required">Le token est requis</string>
+    <string name="edit">Modifier</string>
+    <string name="delete">Supprimer</string>
+    <string name="confirm_delete_title">Confirmer la suppression</string>
+    <string name="confirm_delete_message">Voulez-vous vraiment supprimer cette programmation ?</string>
+    <string name="edit_rule_title">Modifier la programmation</string>
+    <string name="rule_deleted">Programmation supprimée</string>
+    <string name="rule_updated">Programmation mise à jour</string>
 </resources>

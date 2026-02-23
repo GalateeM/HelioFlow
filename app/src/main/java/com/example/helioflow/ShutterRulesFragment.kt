@@ -43,7 +43,11 @@ class ShutterRulesFragment : Fragment() {
         recyclerView = view as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter = MyShutterRulesRecyclerViewAdapter(rulesList)
+        adapter = MyShutterRulesRecyclerViewAdapter(
+            rulesList,
+            onEditClick = { rule, _ -> showEditRuleDialog(rule) },
+            onDeleteClick = { rule, _ -> confirmDeleteRule(rule) }
+        )
         recyclerView.adapter = adapter
 
         fetchProgrammations()
@@ -72,15 +76,70 @@ class ShutterRulesFragment : Fragment() {
             Toast.makeText(context, "Chargement en cours...", Toast.LENGTH_SHORT).show()
             return
         }
-        showNewRuleDialog()
+        showRuleDialog(null)
     }
 
-    private fun showNewRuleDialog() {
+    private fun showEditRuleDialog(rule: ShutterRule) {
+        showRuleDialog(rule)
+    }
+
+    private fun confirmDeleteRule(rule: ShutterRule) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.confirm_delete_title)
+            .setMessage(R.string.confirm_delete_message)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                deleteRule(rule)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun deleteRule(rule: ShutterRule) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                ShutterApiClient.instance.deleteProgrammation(rule.id.toInt())
+                val position = rulesList.indexOfFirst { it.id == rule.id }
+                if (position != -1) {
+                    rulesList.removeAt(position)
+                    adapter.notifyItemRemoved(position)
+                }
+                Toast.makeText(context, R.string.rule_deleted, Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Erreur lors de la suppression: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showRuleDialog(existingRule: ShutterRule?) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_new_rule, null)
         val timeButton = dialogView.findViewById<View>(R.id.time_picker_button)
         
-        var selectedHour = 8
-        var selectedMinute = 0
+        var selectedHour = existingRule?.hour ?: 8
+        var selectedMinute = existingRule?.minute ?: 0
+        val isEdit = existingRule != null
+
+        if (isEdit) {
+            timeButton.tag = String.format("%02d:%02d", selectedHour, selectedMinute)
+            (timeButton as? android.widget.Button)?.text = String.format("%02d:%02d", selectedHour, selectedMinute)
+            
+            val actionRadioGroup = dialogView.findViewById<android.widget.RadioGroup>(R.id.action_radio_group)
+            if (existingRule.action == ShutterAction.OPEN) {
+                actionRadioGroup.check(R.id.radio_open)
+            } else {
+                actionRadioGroup.check(R.id.radio_close)
+            }
+            
+            dialogView.findViewById<CheckBox>(R.id.check_monday).isChecked = 0 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_tuesday).isChecked = 1 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_wednesday).isChecked = 2 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_thursday).isChecked = 3 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_friday).isChecked = 4 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_saturday).isChecked = 5 in existingRule.days
+            dialogView.findViewById<CheckBox>(R.id.check_sunday).isChecked = 6 in existingRule.days
+        } else {
+            timeButton.tag = String.format("%02d:%02d", selectedHour, selectedMinute)
+            (timeButton as? android.widget.Button)?.text = String.format("%02d:%02d", selectedHour, selectedMinute)
+        }
 
         timeButton.setOnClickListener {
             TimePickerDialog(
@@ -98,6 +157,7 @@ class ShutterRulesFragment : Fragment() {
         }
 
         val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(if (isEdit) R.string.edit_rule_title else R.string.new_rule_title)
             .setView(dialogView)
             .setPositiveButton(R.string.validate, null)
             .setNegativeButton(R.string.cancel, null)
@@ -127,8 +187,8 @@ class ShutterRulesFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                val newRule = ShutterRule(
-                    id = (rulesList.size + 1).toString(),
+                val rule = ShutterRule(
+                    id = existingRule?.id ?: ((rulesList.maxOfOrNull { it.id.toIntOrNull() ?: 0 } ?: 0) + 1).toString(),
                     action = action,
                     hour = selectedHour,
                     minute = selectedMinute,
@@ -137,12 +197,22 @@ class ShutterRulesFragment : Fragment() {
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     try {
-                        ShutterApiClient.instance.createProgrammation(newRule.toCreateRequest())
-                        rulesList.add(newRule)
-                        adapter.notifyItemInserted(rulesList.size - 1)
+                        if (isEdit) {
+                            ShutterApiClient.instance.updateProgrammation(rule.id.toInt(), rule.toCreateRequest())
+                            val position = rulesList.indexOfFirst { it.id == existingRule.id }
+                            if (position != -1) {
+                                rulesList[position] = rule
+                                adapter.notifyItemChanged(position)
+                            }
+                            Toast.makeText(context, R.string.rule_updated, Toast.LENGTH_SHORT).show()
+                        } else {
+                            ShutterApiClient.instance.createProgrammation(rule.toCreateRequest())
+                            rulesList.add(rule)
+                            adapter.notifyItemInserted(rulesList.size - 1)
+                        }
                         dialog.dismiss()
                     } catch (e: Exception) {
-                        Toast.makeText(context, "Erreur lors de la création: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Erreur: ${e.message}", Toast.LENGTH_SHORT).show()
                         throw e;
                     }
                 }

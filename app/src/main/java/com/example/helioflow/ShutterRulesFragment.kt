@@ -2,7 +2,9 @@ package com.example.helioflow
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -140,6 +142,87 @@ class ShutterRulesFragment : Fragment() {
             timeButton.tag = String.format("%02d:%02d", selectedHour, selectedMinute)
             (timeButton as? android.widget.Button)?.text = String.format("%02d:%02d", selectedHour, selectedMinute)
         }
+
+        val dayCheckboxes = listOf(
+            dialogView.findViewById<CheckBox>(R.id.check_monday),
+            dialogView.findViewById<CheckBox>(R.id.check_tuesday),
+            dialogView.findViewById<CheckBox>(R.id.check_wednesday),
+            dialogView.findViewById<CheckBox>(R.id.check_thursday),
+            dialogView.findViewById<CheckBox>(R.id.check_friday),
+            dialogView.findViewById<CheckBox>(R.id.check_saturday),
+            dialogView.findViewById<CheckBox>(R.id.check_sunday)
+        )
+
+        dayCheckboxes.forEach {
+            it.isClickable = false
+        }
+
+        var toggleState = false
+        val visitedCheckboxes = mutableSetOf<CheckBox>()
+
+        dialogView.setOnTouchListener { _, event ->
+
+            when (event.action) {
+
+                MotionEvent.ACTION_DOWN -> {
+
+                    visitedCheckboxes.clear()
+
+                    for (checkbox in dayCheckboxes) {
+
+                        val location = IntArray(2)
+                        checkbox.getLocationOnScreen(location)
+
+                        val left = location[0]
+                        val top = location[1]
+                        val right = left + checkbox.width
+                        val bottom = top + checkbox.height
+
+                        if (event.rawX >= left &&
+                            event.rawX <= right &&
+                            event.rawY >= top &&
+                            event.rawY <= bottom) {
+
+                            // Déterminer l'action : cocher ou décocher
+                            toggleState = !checkbox.isChecked
+
+                            checkbox.isChecked = toggleState
+                            visitedCheckboxes.add(checkbox)
+                        }
+                    }
+                    true
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+
+                    for (checkbox in dayCheckboxes) {
+
+                        val location = IntArray(2)
+                        checkbox.getLocationOnScreen(location)
+
+                        val left = location[0]
+                        val top = location[1]
+                        val right = left + checkbox.width
+                        val bottom = top + checkbox.height
+
+                        if (event.rawX >= left &&
+                            event.rawX <= right &&
+                            event.rawY >= top &&
+                            event.rawY <= bottom) {
+
+                            if (!visitedCheckboxes.contains(checkbox)) {
+                                checkbox.isChecked = toggleState
+                                visitedCheckboxes.add(checkbox)
+                            }
+                        }
+                    }
+                    true
+                }
+
+                else -> false
+            }
+        }
+
 
         timeButton.setOnClickListener {
             TimePickerDialog(

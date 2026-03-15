@@ -66,6 +66,7 @@ def create_programmation():
     data = request.json
     
     action = data["action"]
+    params_action = data["params_action"]
     days = data["days"]
     time = data["time"]
     
@@ -73,8 +74,8 @@ def create_programmation():
     cursor = conn.cursor()
     
     cursor.execute(
-        "INSERT INTO Programmations (action, days, time) VALUES (%s, %s, %s)",
-        (action, days, time)
+        "INSERT INTO Programmations (action, params_action, days, time) VALUES (%s, %s, %s, %s)",
+        (action, params_action, days, time)
     )
     
     conn.commit()
@@ -90,6 +91,7 @@ def update_programmation(id):
     data = request.json
 
     action = data.get("action")
+    params_action = data.get("params_action")
     days = data.get("days")
     time = data.get("time")
 
@@ -109,11 +111,12 @@ def update_programmation(id):
         """
         UPDATE Programmations
         SET action = %s,
+            params_action = %s,
             days = %s,
             time = %s
         WHERE id = %s
         """,
-        (action, days, time, id)
+        (action, params_action, days, time, id)
     )
 
     conn.commit()

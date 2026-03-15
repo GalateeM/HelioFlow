@@ -12,18 +12,20 @@ import retrofit2.http.Path
 data class Programmation(
     val id: Int = 0,
     val action: String = "",
+    val params_action: String = "",
     val days: String = "",
     val time: String = ""
 )
 
 data class CreateProgrammationRequest(
     val action: String,
+    val params_action: String,
     val days: String,
     val time: String
 )
 
 fun Programmation.toShutterRule(): ShutterRule {
-    val actionEnum = if (action.lowercase() == "open") ShutterAction.OPEN else ShutterAction.CLOSE
+    val actionEnum = if (params_action.startsWith("0")) ShutterAction.OPEN else ShutterAction.CLOSE
     
     val dayMap = mapOf(
         "L" to 0,
@@ -55,7 +57,11 @@ fun Programmation.toShutterRule(): ShutterRule {
 }
 
 fun ShutterRule.toCreateRequest(): CreateProgrammationRequest {
-    val actionStr = if (action == ShutterAction.OPEN) "open" else "close"
+    val (actionStr, paramsActionStr) = if (action == ShutterAction.OPEN) {
+        "setPositionAndLinearSpeed" to "0, \"slowSpeed\""
+    } else {
+        "setPositionAndLinearSpeed" to "100, \"slowSpeed\""
+    }
     
     val dayMap = mapOf(
         0 to "L",
@@ -72,6 +78,7 @@ fun ShutterRule.toCreateRequest(): CreateProgrammationRequest {
     
     return CreateProgrammationRequest(
         action = actionStr,
+        params_action = paramsActionStr,
         days = daysStr,
         time = timeStr
     )
@@ -111,9 +118,10 @@ fun parseProgrammations(json: String): List<Programmation> {
         val obj = item.value
         val id = Regex(""""id":\s*(\d+)""").find(obj)?.groupValues?.get(1)?.toIntOrNull() ?: 0
         val action = Regex(""""action":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
+        val params_action = Regex(""""params_action":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
         val days = Regex(""""days":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
         val time = Regex(""""time":\s*"([^"]+)"""").find(obj)?.groupValues?.get(1) ?: ""
-        result.add(Programmation(id, action, days, time))
+        result.add(Programmation(id, action, params_action, days, time))
     }
     return result
 }

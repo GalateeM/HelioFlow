@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.helioflow.api.ShutterApiClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.core.view.WindowInsetsControllerCompat
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +47,12 @@ class MainActivity : AppCompatActivity() {
         val settingsButton = findViewById<ImageButton>(R.id.settings_button)
         settingsButton.setOnClickListener {
             showTokenDialog()
+        }
+
+        val remoteButton = findViewById<FloatingActionButton>(R.id.remote_button)
+        remoteButton.setOnClickListener {
+            val intent = Intent(this, RemoteActivity::class.java)
+            startActivity(intent)
         }
 
         if (!tokenManager.hasToken()) {

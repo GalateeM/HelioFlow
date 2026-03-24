@@ -38,4 +38,10 @@
     <string name="edit_rule_title">Modifier la programmation</string>
     <string name="rule_deleted">Programmation supprimée</string>
     <string name="rule_updated">Programmation mise à jour</string>
+    <string name="remote_button">Télécommande</string>
+    <string name="remote_title">Télécommande</string>
+    <string name="salon">Salon</string>
+    <string name="chambre">Chambre</string>
+    <string name="arrow_up">▲</string>
+    <string name="arrow_down">▼</string>
 </resources>

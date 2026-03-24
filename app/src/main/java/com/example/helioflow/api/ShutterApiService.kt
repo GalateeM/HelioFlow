@@ -58,9 +58,9 @@ fun Programmation.toShutterRule(): ShutterRule {
 
 fun ShutterRule.toCreateRequest(): CreateProgrammationRequest {
     val (actionStr, paramsActionStr) = if (action == ShutterAction.OPEN) {
-        "setPositionAndLinearSpeed" to "0, \"slowSpeed\""
+        "setPositionAndLinearSpeed" to "0, \"lowspeed\""
     } else {
-        "setPositionAndLinearSpeed" to "100, \"slowSpeed\""
+        "setPositionAndLinearSpeed" to "100, \"lowspeed\""
     }
     
     val dayMap = mapOf(

@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RemoteActivity"
+            android:exported="false"
+            android:label="@string/remote_title"
+            android:theme="@style/Theme.HelioFlow" />
     </application>
 
 </manifest>

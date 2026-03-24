@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center">
+
+    <!-- Titre -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remote_title"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Bouton Salon (long) -->
+    <Button
+        android:id="@+id/btn_salon"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/salon"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Bouton Chambre (long) -->
+    <Button
+        android:id="@+id/btn_chambre"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/chambre"
+        android:textSize="18sp"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Boutons flèches -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Flèche haut -->
+        <Button
+            android:id="@+id/btn_up"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="@string/arrow_up"
+            android:textSize="24sp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Flèche bas -->
+        <Button
+            android:id="@+id/btn_down"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="@string/arrow_down"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

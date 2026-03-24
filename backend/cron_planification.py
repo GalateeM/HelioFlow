@@ -27,11 +27,17 @@ DAY_MAPPING = {
     6: "D"
 }
 
-def execute_somfy(command_name):
+def execute_somfy(command_name, params):
     token = os.getenv("SOMFY_TOKEN")
     device_salon = os.getenv("DEVICE_URL_SALON")
     device_chambre = os.getenv("DEVICE_URL_CHAMBRE")
     somfy_url = os.getenv("SOMFY_API_URL")
+
+    parsed_params = [
+        int(p.strip()) if p.strip().isdigit()
+        else p.strip().replace('"', '')
+        for p in params.split(',')
+    ]
 
     payloadSalon = {
         "label": "Open Salon",
@@ -41,7 +47,7 @@ def execute_somfy(command_name):
                 "commands": [
                     {
                         "name": command_name,
-                        "parameters": []
+                        "parameters": parsed_params
                     }
                 ]
             }
@@ -56,7 +62,7 @@ def execute_somfy(command_name):
                 "commands": [
                     {
                         "name": command_name,
-                        "parameters": []
+                        "parameters": parsed_params
                     }
                 ]
             }
@@ -69,7 +75,7 @@ def execute_somfy(command_name):
     }
 
     try:
-        response = requests.post(somfy_url, json=payloadSalon, headers=headers)
+        response = requests.post(somfy_url, json=payloadSalon, headers=headers, verify=False)
 
         if response.status_code == 200:
             print("✅ Commande Somfy envoyée avec succès")
@@ -77,7 +83,7 @@ def execute_somfy(command_name):
             print("❌ Erreur Somfy :", response.status_code)
             print(response.text)
 
-        response = requests.post(somfy_url, json=payloadChambre, headers=headers)
+        response = requests.post(somfy_url, json=payloadChambre, headers=headers, verify=False)
 
         if response.status_code == 200:
             print("✅ Commande Somfy envoyée avec succès")
@@ -116,8 +122,8 @@ def main():
             # Nettoyage et séparation des jours
             days_list = [d.strip() for d in prog["days"].split(",")]
             if current_day_code in days_list and prog["time"] == current_time_str:
-                print(f"À exécuter : action={prog['action']}")
-                execute_somfy(prog["action"])
+                print(f"À exécuter : action={prog['action']}-{prog['params_action']}")
+                execute_somfy(prog["action"], prog['params_action'])
 
 
         cursor.close()

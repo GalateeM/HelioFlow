@@ -5,6 +5,24 @@ from dotenv import load_dotenv
 import os
 from somfy_utils import execute_somfy
 
+import time
+import socket
+
+def wait_for_network(host="8.8.8.8", timeout=60):
+    print("Attente du réseau...")
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            socket.setdefaulttimeout(3)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, 53))
+            print("Réseau disponible !")
+            return True
+        except OSError:
+            time.sleep(2)
+    raise Exception("Réseau non disponible après 60s")
+
+wait_for_network()
+
 # CONFIG POSTGRESQL
 load_dotenv()
 DB_USER = os.getenv("POSTGRES_DB_USER")
@@ -36,4 +54,4 @@ while True:
 
             print("🔔 Événement reçu")
             print(payload)
-            execute_somfy(payload['action'], payload['params_action'])
+            execute_somfy(payload['action'], payload['params_action'], payload['device'])

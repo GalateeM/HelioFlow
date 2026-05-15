@@ -55,7 +55,8 @@ def main():
             days_list = [d.strip() for d in prog["days"].split(",")]
             if current_day_code in days_list and prog["time"] == current_time_str:
                 print(f"À exécuter : action={prog['action']}-{prog['params_action']}")
-                execute_somfy(prog["action"], prog['params_action'])
+                execute_somfy(prog["action"], prog['params_action'], "chambre")
+                execute_somfy(prog["action"], prog['params_action'], "salon")
 
 
         cursor.close()

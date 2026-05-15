@@ -8,33 +8,27 @@ DEVICE_SALON = os.getenv("DEVICE_URL_SALON")
 DEVICE_CHAMBRE = os.getenv("DEVICE_URL_CHAMBRE")
 SOMFY_URL = os.getenv("SOMFY_API_URL")
 
-def execute_somfy(command_name, params):
+def execute_somfy(command_name, params, device):
     parsed_params = [
         int(p.strip()) if p.strip().isdigit()
         else p.strip().replace('"', '')
         for p in params.split(',')
     ]
 
-    payloadSalon = {
-        "label": "Open Salon",
-        "actions": [
-            {
-                "deviceURL": DEVICE_SALON,
-                "commands": [
-                    {
-                        "name": command_name,
-                        "parameters": parsed_params
-                    }
-                ]
-            }
-        ]
-    }
+    if device == "salon":
+        label = "Open Salon"
+        deviceURL = DEVICE_SALON
 
-    payloadChambre = {
-        "label": "Open Chambre",
+    else:
+        label = "Open Chambre",
+        deviceURL = DEVICE_CHAMBRE
+        
+
+    payload = {
+        "label": label,
         "actions": [
             {
-                "deviceURL": DEVICE_CHAMBRE,
+                "deviceURL": deviceURL,
                 "commands": [
                     {
                         "name": command_name,
@@ -51,15 +45,7 @@ def execute_somfy(command_name, params):
     }
 
     try:
-        response = requests.post(SOMFY_URL, json=payloadSalon, headers=headers, verify=False)
-
-        if response.status_code == 200:
-            print("✅ Commande Somfy envoyée avec succès")
-        else:
-            print("❌ Erreur Somfy :", response.status_code)
-            print(response.text)
-
-        response = requests.post(SOMFY_URL, json=payloadChambre, headers=headers, verify=False)
+        response = requests.post(SOMFY_URL, json=payload, headers=headers, verify=False)
 
         if response.status_code == 200:
             print("✅ Commande Somfy envoyée avec succès")

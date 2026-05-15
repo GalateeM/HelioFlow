@@ -1,15 +1,15 @@
 import mysql.connector
-import requests
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+from somfy_utils import execute_somfy
 
 # CONFIGURATION MYSQL
 load_dotenv()
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASS")
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("MYSQL_DB_USER")
+DB_PASS = os.getenv("MYSQL_DB_PASS")
+DB_HOST = os.getenv("MYSQL_DB_HOST")
+DB_NAME = os.getenv("MYSQL_DB_NAME")
 DB_CONFIG = {
     "host": DB_HOST,
     "user": DB_USER,
@@ -26,74 +26,6 @@ DAY_MAPPING = {
     5: "S",
     6: "D"
 }
-
-def execute_somfy(command_name, params):
-    token = os.getenv("SOMFY_TOKEN")
-    device_salon = os.getenv("DEVICE_URL_SALON")
-    device_chambre = os.getenv("DEVICE_URL_CHAMBRE")
-    somfy_url = os.getenv("SOMFY_API_URL")
-
-    parsed_params = [
-        int(p.strip()) if p.strip().isdigit()
-        else p.strip().replace('"', '')
-        for p in params.split(',')
-    ]
-
-    payloadSalon = {
-        "label": "Open Salon",
-        "actions": [
-            {
-                "deviceURL": device_salon,
-                "commands": [
-                    {
-                        "name": command_name,
-                        "parameters": parsed_params
-                    }
-                ]
-            }
-        ]
-    }
-
-    payloadChambre = {
-        "label": "Open Chambre",
-        "actions": [
-            {
-                "deviceURL": device_chambre,
-                "commands": [
-                    {
-                        "name": command_name,
-                        "parameters": parsed_params
-                    }
-                ]
-            }
-        ]
-    }
-
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-
-    try:
-        response = requests.post(somfy_url, json=payloadSalon, headers=headers, verify=False)
-
-        if response.status_code == 200:
-            print("✅ Commande Somfy envoyée avec succès")
-        else:
-            print("❌ Erreur Somfy :", response.status_code)
-            print(response.text)
-
-        response = requests.post(somfy_url, json=payloadChambre, headers=headers, verify=False)
-
-        if response.status_code == 200:
-            print("✅ Commande Somfy envoyée avec succès")
-        else:
-            print("❌ Erreur Somfy :", response.status_code)
-            print(response.text)
-
-    except Exception as e:
-        print("❌ Exception appel Somfy :", e)
-
 
 
 def main():

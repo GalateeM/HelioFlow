@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -91,6 +92,20 @@ class RemoteActivity : AppCompatActivity() {
             }
             sendAction(room, "stop")
         }
+
+        val seekPercent = findViewById<SeekBar>(R.id.seek_percent)
+        seekPercent.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                val room = selectedRoom
+                if (room == null) {
+                    Toast.makeText(this@RemoteActivity, "Sélectionnez d'abord une pièce", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                sendAction(room, "setPositionAndLinearSpeed", seekBar.progress.toString())
+            }
+        })
     }
 
     private fun updateRoomSelection(selected: Button, other: Button) {
@@ -100,7 +115,7 @@ class RemoteActivity : AppCompatActivity() {
         other.setBackgroundColor(defaultColor)
     }
 
-    private fun sendAction(room: String, action: String) {
+    private fun sendAction(room: String, action: String, paramsAction: String = "") {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 Class.forName("org.postgresql.Driver")
@@ -108,11 +123,12 @@ class RemoteActivity : AppCompatActivity() {
                 val connection: Connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)
                 Log.d(TAG, "Connected successfully")
 
-                val sql = "INSERT INTO remote_actions (action, params_action, device) VALUES (?, '', ?)"
-                Log.d(TAG, "Executing SQL: $sql, params: action=$action")
+                val sql = "INSERT INTO remote_actions (action, params_action, device) VALUES (?, ?, ?)"
+                Log.d(TAG, "Executing SQL: $sql, action=$action, paramsAction=$paramsAction")
                 val preparedStatement = connection.prepareStatement(sql)
                 preparedStatement.setString(1, action)
-                preparedStatement.setString(2, room)
+                preparedStatement.setString(2, paramsAction)
+                preparedStatement.setString(3, room)
                 val rows = preparedStatement.executeUpdate()
                 Log.d(TAG, "Rows affected: $rows")
 
@@ -120,7 +136,12 @@ class RemoteActivity : AppCompatActivity() {
                 connection.close()
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@RemoteActivity, "Volets $action : $room", Toast.LENGTH_SHORT).show()
+                    val message = if (action == "setPositionAndLinearSpeed") {
+                        "Volets $room : $paramsAction%"
+                    } else {
+                        "Volets $action : $room"
+                    }
+                    Toast.makeText(this@RemoteActivity, message, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error inserting remote action", e)

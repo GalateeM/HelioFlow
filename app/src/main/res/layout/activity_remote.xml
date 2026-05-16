@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="32dp"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:clipToPadding="false">
 
     <!-- Titre -->
@@ -18,55 +18,84 @@
         android:textStyle="bold"
         android:layout_marginBottom="32dp" />
 
-    <!-- Bouton Salon (long) -->
-    <Button
-        android:id="@+id/btn_salon"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="@string/salon"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Bouton Chambre (long) -->
-    <Button
-        android:id="@+id/btn_chambre"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="@string/chambre"
-        android:textSize="18sp"
-        android:layout_marginBottom="32dp" />
-
-    <!-- Boutons flèches -->
+    <!-- Content: buttons on left, slider on right -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <!-- Flèche haut -->
-        <Button
-            android:id="@+id/btn_up"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="@string/arrow_up"
-            android:textSize="24sp"
-            android:layout_marginEnd="16dp" />
-        <!-- Pause -->
-        <ImageButton
-            android:id="@+id/btn_pause"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/pause_24px"
-            android:scaleType="center"
-            android:background="@drawable/btn_pause_bg"
-            android:layout_marginEnd="16dp" />
+        <!-- Left: buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
 
-        <!-- Flèche bas -->
-        <Button
-            android:id="@+id/btn_down"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="@string/arrow_down"
-            android:textSize="24sp" />
+            <!-- Bouton Salon (long) -->
+            <Button
+                android:id="@+id/btn_salon"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="@string/salon"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Bouton Chambre (long) -->
+            <Button
+                android:id="@+id/btn_chambre"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="@string/chambre"
+                android:textSize="18sp"
+                android:layout_marginBottom="32dp" />
+
+            <!-- Boutons flèches -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Flèche haut -->
+                <Button
+                    android:id="@+id/btn_up"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:text="@string/arrow_up"
+                    android:textSize="24sp"
+                    android:layout_marginEnd="16dp" />
+                <!-- Pause -->
+                <ImageButton
+                    android:id="@+id/btn_pause"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/pause_24px"
+                    android:scaleType="center"
+                    android:background="@drawable/btn_pause_bg"
+                    android:layout_marginEnd="16dp" />
+
+                <!-- Flèche bas -->
+                <Button
+                    android:id="@+id/btn_down"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:text="@string/arrow_down"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right: vertical slider -->
+        <com.example.helioflow.VerticalSeekBar
+            android:id="@+id/seek_percent"
+            android:layout_width="32dp"
+            android:layout_height="200dp"
+            android:max="100"
+            android:progress="50"
+            android:layout_marginStart="16dp" />
 
     </LinearLayout>
 

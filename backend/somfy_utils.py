@@ -13,7 +13,7 @@ def execute_somfy(command_name, params, device):
         int(p.strip()) if p.strip().isdigit()
         else p.strip().replace('"', '')
         for p in params.split(',')
-    ]
+    ] if params.strip() else []
 
     if device == "salon":
         label = "Open Salon"
@@ -45,6 +45,7 @@ def execute_somfy(command_name, params, device):
     }
 
     try:
+        print(payload)
         response = requests.post(SOMFY_URL, json=payload, headers=headers, verify=False)
 
         if response.status_code == 200:

@@ -49,24 +49,25 @@ class RemoteActivity : AppCompatActivity() {
         val btnSalon = findViewById<Button>(R.id.btn_salon)
         val btnChambre = findViewById<Button>(R.id.btn_chambre)
         val btnUp = findViewById<Button>(R.id.btn_up)
+        val btnPause = findViewById<Button>(R.id.btn_pause)
         val btnDown = findViewById<Button>(R.id.btn_down)
 
         btnSalon.setOnClickListener {
             selectedRoom = "salon"
             updateRoomSelection(btnSalon, btnChambre)
-            Toast.makeText(this, "Salon sélectionné", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Salon sélectionné", Toast.LENGTH_SHORT).show()
         }
 
         btnChambre.setOnClickListener {
             selectedRoom = "chambre"
             updateRoomSelection(btnChambre, btnSalon)
-            Toast.makeText(this, "Chambre sélectionnée", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Chambre sélectionnée", Toast.LENGTH_SHORT).show()
         }
 
         btnUp.setOnClickListener {
             val room = selectedRoom
             if (room == null) {
-                Toast.makeText(this, "Veuillez d'abord sélectionner une pièce", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Veuillez d'abord sélectionner une pièce", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             sendAction(room, "open")
@@ -75,10 +76,19 @@ class RemoteActivity : AppCompatActivity() {
         btnDown.setOnClickListener {
             val room = selectedRoom
             if (room == null) {
-                Toast.makeText(this, "Veuillez d'abord sélectionner une pièce", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Veuillez d'abord sélectionner une pièce", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             sendAction(room, "close")
+        }
+
+        btnPause.setOnClickListener {
+            val room = selectedRoom
+            if (room == null) {
+                // Toast.makeText(this, "Veuillez d'abord sélectionner une pièce", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            sendAction(room, "stop")
         }
     }
 

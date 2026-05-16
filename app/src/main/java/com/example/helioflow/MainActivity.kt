@@ -26,9 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.root_layout)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val extraTop = resources.getDimensionPixelSize(R.dimen.text_margin)
             view.setPadding(
                 view.paddingLeft,
-                view.paddingTop,
+                systemBars.top + extraTop,
                 view.paddingRight,
                 systemBars.bottom
             )

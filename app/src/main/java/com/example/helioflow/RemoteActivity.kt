@@ -3,6 +3,7 @@ package com.example.helioflow
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -49,7 +50,7 @@ class RemoteActivity : AppCompatActivity() {
         val btnSalon = findViewById<Button>(R.id.btn_salon)
         val btnChambre = findViewById<Button>(R.id.btn_chambre)
         val btnUp = findViewById<Button>(R.id.btn_up)
-        val btnPause = findViewById<Button>(R.id.btn_pause)
+        val btnPause = findViewById<ImageButton>(R.id.btn_pause)
         val btnDown = findViewById<Button>(R.id.btn_down)
 
         btnSalon.setOnClickListener {

@@ -50,14 +50,14 @@
             android:text="@string/arrow_up"
             android:textSize="24sp"
             android:layout_marginEnd="16dp" />
-
         <!-- Pause -->
-        <Button
+        <ImageButton
             android:id="@+id/btn_pause"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:text="@string/pause"
-            android:textSize="24sp"
+            android:src="@drawable/pause_24px"
+            android:scaleType="center"
+            android:backgroundTint="?attr/colorPrimary"
             android:layout_marginEnd="16dp" />
 
         <!-- Flèche bas -->
